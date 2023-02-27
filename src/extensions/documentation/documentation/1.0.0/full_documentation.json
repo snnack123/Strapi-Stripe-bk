@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2023-02-27T12:45:00.014Z"
+    "x-generation-date": "2023-02-27T14:45:34.121Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -5667,6 +5667,24 @@
                                         "confirmedAccount": {
                                           "type": "boolean"
                                         },
+                                        "log": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              },
+                                              "date": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            }
+                                          }
+                                        },
                                         "createdAt": {
                                           "type": "string",
                                           "format": "date-time"
@@ -6242,6 +6260,24 @@
                                         },
                                         "confirmedAccount": {
                                           "type": "boolean"
+                                        },
+                                        "log": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              },
+                                              "date": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            }
+                                          }
                                         },
                                         "createdAt": {
                                           "type": "string",
@@ -6852,6 +6888,24 @@
                                         "confirmedAccount": {
                                           "type": "boolean"
                                         },
+                                        "log": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              },
+                                              "date": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            }
+                                          }
+                                        },
                                         "createdAt": {
                                           "type": "string",
                                           "format": "date-time"
@@ -7428,6 +7482,24 @@
                                         "confirmedAccount": {
                                           "type": "boolean"
                                         },
+                                        "log": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              },
+                                              "date": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            }
+                                          }
+                                        },
                                         "createdAt": {
                                           "type": "string",
                                           "format": "date-time"
@@ -7775,6 +7847,24 @@
                                                       },
                                                       "confirmedAccount": {
                                                         "type": "boolean"
+                                                      },
+                                                      "log": {
+                                                        "type": "array",
+                                                        "items": {
+                                                          "type": "object",
+                                                          "properties": {
+                                                            "id": {
+                                                              "type": "number"
+                                                            },
+                                                            "type": {
+                                                              "type": "string"
+                                                            },
+                                                            "date": {
+                                                              "type": "string",
+                                                              "format": "date-time"
+                                                            }
+                                                          }
+                                                        }
                                                       },
                                                       "createdAt": {
                                                         "type": "string",
@@ -8380,6 +8470,24 @@
                                                       },
                                                       "confirmedAccount": {
                                                         "type": "boolean"
+                                                      },
+                                                      "log": {
+                                                        "type": "array",
+                                                        "items": {
+                                                          "type": "object",
+                                                          "properties": {
+                                                            "id": {
+                                                              "type": "number"
+                                                            },
+                                                            "type": {
+                                                              "type": "string"
+                                                            },
+                                                            "date": {
+                                                              "type": "string",
+                                                              "format": "date-time"
+                                                            }
+                                                          }
+                                                        }
                                                       },
                                                       "createdAt": {
                                                         "type": "string",
@@ -9019,6 +9127,24 @@
                                                       "confirmedAccount": {
                                                         "type": "boolean"
                                                       },
+                                                      "log": {
+                                                        "type": "array",
+                                                        "items": {
+                                                          "type": "object",
+                                                          "properties": {
+                                                            "id": {
+                                                              "type": "number"
+                                                            },
+                                                            "type": {
+                                                              "type": "string"
+                                                            },
+                                                            "date": {
+                                                              "type": "string",
+                                                              "format": "date-time"
+                                                            }
+                                                          }
+                                                        }
+                                                      },
                                                       "createdAt": {
                                                         "type": "string",
                                                         "format": "date-time"
@@ -9624,6 +9750,24 @@
                                                       "confirmedAccount": {
                                                         "type": "boolean"
                                                       },
+                                                      "log": {
+                                                        "type": "array",
+                                                        "items": {
+                                                          "type": "object",
+                                                          "properties": {
+                                                            "id": {
+                                                              "type": "number"
+                                                            },
+                                                            "type": {
+                                                              "type": "string"
+                                                            },
+                                                            "date": {
+                                                              "type": "string",
+                                                              "format": "date-time"
+                                                            }
+                                                          }
+                                                        }
+                                                      },
                                                       "createdAt": {
                                                         "type": "string",
                                                         "format": "date-time"
@@ -10160,6 +10304,12 @@
               },
               "confirmedAccount": {
                 "type": "boolean"
+              },
+              "log": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LogLogComponent"
+                }
               }
             }
           }
@@ -10617,6 +10767,24 @@
                                         "confirmedAccount": {
                                           "type": "boolean"
                                         },
+                                        "log": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              },
+                                              "date": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            }
+                                          }
+                                        },
                                         "createdAt": {
                                           "type": "string",
                                           "format": "date-time"
@@ -10726,6 +10894,12 @@
               },
               "confirmedAccount": {
                 "type": "boolean"
+              },
+              "log": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LogLogComponent"
+                }
               },
               "createdAt": {
                 "type": "string",
@@ -11225,6 +11399,24 @@
                                         "confirmedAccount": {
                                           "type": "boolean"
                                         },
+                                        "log": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              },
+                                              "date": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            }
+                                          }
+                                        },
                                         "createdAt": {
                                           "type": "string",
                                           "format": "date-time"
@@ -11334,6 +11526,12 @@
               },
               "confirmedAccount": {
                 "type": "boolean"
+              },
+              "log": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LogLogComponent"
+                }
               },
               "createdAt": {
                 "type": "string",
@@ -11866,6 +12064,24 @@
                                         "confirmedAccount": {
                                           "type": "boolean"
                                         },
+                                        "log": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              },
+                                              "date": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            }
+                                          }
+                                        },
                                         "createdAt": {
                                           "type": "string",
                                           "format": "date-time"
@@ -11975,6 +12191,12 @@
               },
               "confirmedAccount": {
                 "type": "boolean"
+              },
+              "log": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LogLogComponent"
+                }
               },
               "createdAt": {
                 "type": "string",
@@ -12474,6 +12696,24 @@
                                         "confirmedAccount": {
                                           "type": "boolean"
                                         },
+                                        "log": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "type": {
+                                                "type": "string"
+                                              },
+                                              "date": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            }
+                                          }
+                                        },
                                         "createdAt": {
                                           "type": "string",
                                           "format": "date-time"
@@ -12584,6 +12824,12 @@
               "confirmedAccount": {
                 "type": "boolean"
               },
+              "log": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LogLogComponent"
+                }
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -12637,6 +12883,21 @@
           },
           "meta": {
             "type": "object"
+          }
+        }
+      },
+      "LogLogComponent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

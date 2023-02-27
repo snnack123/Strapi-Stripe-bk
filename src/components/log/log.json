@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_log_logs",
+  "info": {
+    "displayName": "log"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "string"
+    },
+    "date": {
+      "type": "datetime"
+    }
+  }
+}

@@ -75,6 +75,11 @@
     "confirmedAccount": {
       "type": "boolean",
       "default": false
+    },
+    "log": {
+      "type": "component",
+      "repeatable": true,
+      "component": "log.log"
     }
   }
 }

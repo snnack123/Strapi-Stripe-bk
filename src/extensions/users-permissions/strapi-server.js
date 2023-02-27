@@ -166,7 +166,6 @@ module.exports = (plugin) => {
   }
 
   plugin.controllers.auth.confirmAccount = async (ctx) => {
-    console.log('here')
     try {
       const body = ctx.request.body;
       await confirmAccountSchema.validate(body);
@@ -326,6 +325,7 @@ module.exports = (plugin) => {
         where: {
           confirmationToken: token,
         },
+        populate: ['log'],
       });
 
       if (!userData || userData.blocked) {
@@ -338,6 +338,7 @@ module.exports = (plugin) => {
           data: {
             confirmedAccount: true,
             confirmationToken: null,
+            log: [...userData.log, { type: 'confirmed', date: new Date() }]
           },
         },
       );
