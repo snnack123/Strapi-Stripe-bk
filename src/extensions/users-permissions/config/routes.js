@@ -126,6 +126,20 @@ const routes =
           "actionType": "resetPassword"
         }
       }
+    },
+    {
+      "method": "POST",
+      "path": "/refresh-token",
+      "handler": "auth.refreshToken",
+      "config": {
+        "prefix": "",
+        "description": "Refresh token",
+        "tag": {
+          "name": "Auth",
+          "plugin": "User-Permissions",
+          "actionType": "refreshToken"
+        }
+      }
     }
   ]
 

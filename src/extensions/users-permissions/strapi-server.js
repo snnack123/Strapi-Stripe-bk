@@ -413,6 +413,34 @@ module.exports = (plugin) => {
     }
   }
 
+  plugin.controllers.auth.refreshToken = async (ctx) => {
+    try {
+      const { id } = await checkStrapiToken(ctx);
+
+      const foundUser = await strapi.query("plugin::users-permissions.user").findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (foundUser) {
+        const newToken = await strapi.plugins['users-permissions'].services.jwt.issue({
+          id: foundUser.id,
+        });
+
+        ctx.status = 200;
+        ctx.body = { status: true, message: '', error: "", token: newToken };
+      } else {
+        ctx.status = 200;
+        ctx.body = { status: false, message: '', error: "", token: "" };
+      }
+    } catch (error) {
+      ctx.status = 400;
+      ctx.body = { status: false, message: 'Invalid request', error: error };
+      console.log(error);
+    }
+  }
+
   routes.forEach((route) => {
     return plugin.routes['content-api'].routes.push(route);
   });
