@@ -507,10 +507,10 @@ module.exports = (plugin) => {
           plans: subscriptionPlans, 
           payments: payments,
           card: {
-            last4: defaultCard.card?.last4,
-            expMonth: defaultCard.card?.exp_month,
-            expYear: defaultCard.card?.exp_year,
-            brand: defaultCard.card?.brand,
+            last4: defaultCard ? defaultCard.card?.last4 : '',
+            expMonth: defaultCard ? defaultCard.card?.exp_month : '',
+            expYear: defaultCard ? defaultCard.card?.exp_year : '',
+            brand: defaultCard ? defaultCard.card?.brand : '',
           }
         }
       };
