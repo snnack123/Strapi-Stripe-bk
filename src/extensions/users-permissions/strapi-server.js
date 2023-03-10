@@ -1,5 +1,5 @@
 const { confirmAccountSchema, resetPasswordSchema, verifyTokenSchema, resetPasswordWithTokenSchema, verifyConfirmAccountSchema, subscriptionSchema } = require('../utils/schemas');
-const { checkStrapiToken, generateConfirmationToken, checkTokenIsExpired } = require('../utils/utilFunctions');
+const { checkStrapiToken, generateConfirmationToken, checkTokenIsExpired, findStripeUser } = require('../utils/utilFunctions');
 const { MILLISECONDS_PER_DAY } = require('../utils/constants');
 const { generateRandomInteger } = require('../utils/crypto');
 const routes = require('./config/routes');
@@ -104,6 +104,7 @@ module.exports = (plugin) => {
       delete userData.confirmationToken;
       delete userData.updatedAt;
       delete userData.createdAt;
+      delete userData.stripeId;
 
       //send user data
       ctx.status = 200;
@@ -212,7 +213,7 @@ module.exports = (plugin) => {
     }
   }
 
-  plugin.controllers.auth.findStripeUser = async (ctx) => {
+  plugin.controllers.auth.findOrCreateStripeUser = async (ctx) => {
     try {
       let stripeId = null;
       const foundCustomer = await stripe.customers.list({
@@ -414,6 +415,7 @@ module.exports = (plugin) => {
   }
 
   plugin.controllers.auth.refreshToken = async (ctx) => {
+    console.log('Refresh token')
     try {
       const { id } = await checkStrapiToken(ctx);
 
@@ -428,6 +430,8 @@ module.exports = (plugin) => {
           id: foundUser.id,
         });
 
+        console.log('New token: ', newToken);
+
         ctx.status = 200;
         ctx.body = { status: true, message: '', error: "", token: newToken };
       } else {
@@ -438,6 +442,126 @@ module.exports = (plugin) => {
       ctx.status = 400;
       ctx.body = { status: false, message: 'Invalid request', error: error };
       console.log(error);
+    }
+  }
+
+  plugin.controllers.auth.getSubscriptionPlans = async (ctx) => {
+    try {
+      const {customer, foundUser} = await findStripeUser(ctx, stripe);
+
+      // get all payment methods for customer
+      const customerPaymentMethods = await stripe.paymentMethods.list({
+        customer: foundUser.stripeId,
+      });
+
+      const defaultPaymentMethod = customer.invoice_settings.default_payment_method || null;
+      const defaultCard = customerPaymentMethods !== null ? customerPaymentMethods.data.find((method) => method.id === defaultPaymentMethod) : customerPaymentMethods.data[0];
+
+      // extract active subscription plan id
+      const customerPlanId = customer?.subscriptions?.data[0]?.plan.product || '';
+      let customerPlanName = '';
+
+      // get all active plans from stripe
+      const foundSubscriptions = await stripe.plans.list({ active: true, expand: ['data.product'] });
+      const customerPayments = await stripe.paymentIntents.list({customer:foundUser.stripeId});
+
+      const subscriptionPlans = foundSubscriptions.data.map((plan) => {
+        // find active plan name
+        if (plan.product.id === customerPlanId) {
+          customerPlanName = plan.product.name;
+        }
+
+        return {
+          name: plan.product.name,
+          amount: plan.amount / 100,
+          amountOnYear: plan.amount * 12 / 100,
+          currency: plan.currency,
+          interval: plan.interval,
+        }
+      });
+
+      const payments = await Promise.all(
+        customerPayments.data.map(async (payment) => {
+          const invoice = await stripe.invoices.retrieve(payment.invoice);
+          
+          return {
+            date: payment.created,
+            amount: payment.amount / 100,
+            currency: payment.currency,
+            status: payment.status,
+            description: payment.description,
+            invoice: invoice.hosted_invoice_url,
+          }
+        }
+      ));
+
+      ctx.status = 200;
+      ctx.body = { 
+        status: true, 
+        data: { 
+          activePlan: {
+            name: customerPlanName,
+            expireDate: customer?.subscriptions?.data[0]?.current_period_end,
+            type: customer?.subscriptions?.data[0]?.plan.interval,
+          },
+          plans: subscriptionPlans, 
+          payments: payments,
+          card: {
+            last4: defaultCard.card?.last4,
+            expMonth: defaultCard.card?.exp_month,
+            expYear: defaultCard.card?.exp_year,
+            brand: defaultCard.card?.brand,
+          }
+        }
+      };
+    } catch (error) {
+      ctx.status = 400;
+      ctx.body = { status: false, message: 'Invalid request', error: error };
+      console.log(error);
+    }
+  }
+
+  plugin.controllers.auth.createCreditCard = async (ctx) => {
+    try {
+      const {customer} = await findStripeUser(ctx, stripe);
+
+      const session = await stripe.checkout.sessions.create({
+        customer: customer.id,
+        payment_method_types: ['card'],
+        mode: 'setup',
+        success_url: `${process.env.FRONTEND_URL}/settings?type=billing`,
+        cancel_url: `${process.env.FRONTEND_URL}/settings?type=billing`,
+      });
+
+      // const session = await stripe.billingPortal.sessions.create({
+      //   customer: customer.id,
+      //   return_url: 'https://your-website.com/account',
+      // });
+
+      ctx.status = 200;
+      ctx.body = { status: true, message: 'Credit card updated', error: "", url: session.url };
+    } catch (error) {
+      console.log(error);
+      ctx.status = 400;
+      ctx.body = { status: false, message: 'Invalid request', error: error };
+    }
+  }
+
+  plugin.controllers.auth.editCreditCard = async (ctx) => {
+    try {
+      const {customer} = await findStripeUser(ctx, stripe);
+
+      const session = await stripe.billingPortal.sessions.create({
+        customer: customer.id,
+        return_url: `${process.env.FRONTEND_URL}/settings?type=billing`,
+      });
+
+      ctx.status = 200;
+      ctx.body = { status: true, message: 'Credit card updated', error: "", url: session.url };
+    } catch (error) {
+      console.log(error);
+      ctx.status = 400;
+      ctx.body = { status: false, message: 'Invalid request', error: error };
     }
   }
 

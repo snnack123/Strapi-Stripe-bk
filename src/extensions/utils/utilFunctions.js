@@ -15,8 +15,31 @@ const generateConfirmationToken = () => {
     return Math.floor(Math.random() * 9000000);
 }
 
+const findStripeUser = async (ctx, stripe) => {
+    try {
+        const { id } = await checkStrapiToken(ctx);
+
+        const foundUser = await strapi.query("plugin::users-permissions.user").findOne({
+            where: {
+                id: id,
+            },
+        });
+    
+        const customer = await stripe.customers.retrieve(
+            foundUser.stripeId,
+            { expand: ['subscriptions'] }
+        );
+    
+        return {customer, foundUser};
+    } catch (error) {
+        console.log(error);
+        return { status: false, message: 'Error finding stripe user', error: error };
+    }
+}
+
 module.exports = {
     checkStrapiToken,
     checkTokenIsExpired,
-    generateConfirmationToken
+    generateConfirmationToken,
+    findStripeUser
 }

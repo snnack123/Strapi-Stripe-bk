@@ -60,14 +60,14 @@ const routes =
     {
       "method": "POST",
       "path": "/find-stripe-user",
-      "handler": "auth.findStripeUser",
+      "handler": "auth.findOrCreateStripeUser",
       "config": {
         "prefix": "",
         "description": "Find stripe user",
         "tag": {
           "name": "Auth",
           "plugin": "User-Permissions",
-          "actionType": "findStripeUser"
+          "actionType": "findOrCreateStripeUser"
         }
       }
     },
@@ -138,6 +138,48 @@ const routes =
           "name": "Auth",
           "plugin": "User-Permissions",
           "actionType": "refreshToken"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription-plans",
+      "handler": "auth.getSubscriptionPlans",
+      "config": {
+        "prefix": "",
+        "description": "Get subscription plans",
+        "tag": {
+          "name": "Auth",
+          "plugin": "User-Permissions",
+          "actionType": "getSubscriptionPlans"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/create-card",
+      "handler": "auth.createCreditCard",
+      "config": {
+        "prefix": "",
+        "description": "Create credit card",
+        "tag": {
+          "name": "Auth",
+          "plugin": "User-Permissions",
+          "actionType": "createCreditCard"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/edit-card",
+      "handler": "auth.editCreditCard",
+      "config": {
+        "prefix": "",
+        "description": "Edit credit card",
+        "tag": {
+          "name": "Auth",
+          "plugin": "User-Permissions",
+          "actionType": "editCreditCard"
         }
       }
     }
