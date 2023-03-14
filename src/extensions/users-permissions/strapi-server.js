@@ -447,7 +447,7 @@ module.exports = (plugin) => {
 
   plugin.controllers.auth.getSubscriptionPlans = async (ctx) => {
     try {
-      const {customer, foundUser} = await findStripeUser(ctx, stripe);
+      const { customer, foundUser } = await findStripeUser(ctx, stripe);
 
       // get all payment methods for customer
       const customerPaymentMethods = await stripe.paymentMethods.list({
@@ -463,7 +463,7 @@ module.exports = (plugin) => {
 
       // get all active plans from stripe
       const foundSubscriptions = await stripe.plans.list({ active: true, expand: ['data.product'] });
-      const customerPayments = await stripe.paymentIntents.list({customer:foundUser.stripeId});
+      const customerPayments = await stripe.paymentIntents.list({ customer: foundUser.stripeId });
 
       const subscriptionPlans = foundSubscriptions.data.map((plan) => {
         // find active plan name
@@ -483,7 +483,7 @@ module.exports = (plugin) => {
       const payments = await Promise.all(
         customerPayments.data.map(async (payment) => {
           const invoice = await stripe.invoices.retrieve(payment.invoice);
-          
+
           return {
             date: payment.created,
             amount: payment.amount / 100,
@@ -493,18 +493,18 @@ module.exports = (plugin) => {
             invoice: invoice.hosted_invoice_url,
           }
         }
-      ));
+        ));
 
       ctx.status = 200;
-      ctx.body = { 
-        status: true, 
-        data: { 
+      ctx.body = {
+        status: true,
+        data: {
           activePlan: {
             name: customerPlanName,
             expireDate: customer?.subscriptions?.data[0]?.current_period_end,
             type: customer?.subscriptions?.data[0]?.plan.interval,
           },
-          plans: subscriptionPlans, 
+          plans: subscriptionPlans,
           payments: payments,
           card: {
             last4: defaultCard ? defaultCard.card?.last4 : '',
@@ -523,7 +523,7 @@ module.exports = (plugin) => {
 
   plugin.controllers.auth.createCreditCard = async (ctx) => {
     try {
-      const {customer} = await findStripeUser(ctx, stripe);
+      const { customer } = await findStripeUser(ctx, stripe);
 
       const session = await stripe.checkout.sessions.create({
         customer: customer.id,
@@ -549,7 +549,7 @@ module.exports = (plugin) => {
 
   plugin.controllers.auth.editCreditCard = async (ctx) => {
     try {
-      const {customer} = await findStripeUser(ctx, stripe);
+      const { customer } = await findStripeUser(ctx, stripe);
 
       const session = await stripe.billingPortal.sessions.create({
         customer: customer.id,
@@ -565,9 +565,41 @@ module.exports = (plugin) => {
     }
   }
 
+  plugin.controllers.auth.updateUser = async (ctx) => {
+    try {
+      const { customer, foundUser } = await findStripeUser(ctx, stripe);
+
+      if (customer && foundUser) {
+        const { type, data } = ctx.request.body;
+
+        // update strapi user email
+        await strapi.entityService.update('plugin::users-permissions.user', foundUser.id,
+          {
+            data: data
+          },
+        );
+
+        if (type === 'email') {
+          // update stripe customer email
+          await stripe.customers.update(customer.id, { email: email });
+        }
+
+        ctx.status = 200;
+        ctx.body = { status: true, message: 'User updated', error: "" };
+      } else {
+        ctx.status = 200;
+        ctx.body = { status: false, message: 'User not found', error: "", user: {} };
+      }
+    } catch (error) {
+      console.log(error);
+      ctx.status = 400;
+      ctx.body = { status: false, message: 'Invalid request', error: error };
+    }
+  }
+
   routes.forEach((route) => {
     return plugin.routes['content-api'].routes.push(route);
   });
 
   return plugin;
-};
+}

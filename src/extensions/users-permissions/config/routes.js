@@ -182,6 +182,20 @@ const routes =
           "actionType": "editCreditCard"
         }
       }
+    },
+    {
+      "method": "POST",
+      "path": "/update-user",
+      "handler": "auth.updateUser",
+      "config": {
+        "prefix": "",
+        "description": "Update user",
+        "tag": {
+          "name": "Auth",
+          "plugin": "User-Permissions",
+          "actionType": "updateUser"
+        }
+      }
     }
   ]
 
