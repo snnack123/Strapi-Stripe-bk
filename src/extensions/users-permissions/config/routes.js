@@ -196,6 +196,20 @@ const routes =
           "actionType": "updateUser"
         }
       }
+    },
+    {
+      "method": "POST",
+      "path": "/admin-resetToken",
+      "handler": "auth.adminResetToken",
+      "config": {
+        "prefix": "",
+        "description": "Admin route for reset token",
+        "tag": {
+          "name": "Auth",
+          "plugin": "User-Permissions",
+          "actionType": "adminResetToken"
+        }
+      }
     }
   ]
 

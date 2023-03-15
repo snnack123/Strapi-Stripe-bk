@@ -272,8 +272,9 @@ module.exports = (plugin) => {
       });
 
       if (userData?.id) {
-        const checkedToken = userData.resetPasswordToken ? checkTokenIsExpired(userData.resetPasswordTokenExp) : false;
-        if (!checkedToken) {
+        const checkedToken = checkTokenIsExpired(userData.resetPasswordTokenExp || null);
+
+        if (checkedToken) {
           const resetPasswordToken = generateRandomInteger().toString();
           const resetPasswordCodeExpiresAt = new Date(
             Date.now() + MILLISECONDS_PER_DAY,
@@ -590,6 +591,29 @@ module.exports = (plugin) => {
         ctx.status = 200;
         ctx.body = { status: false, message: 'User not found', error: "", user: {} };
       }
+    } catch (error) {
+      console.log(error);
+      ctx.status = 400;
+      ctx.body = { status: false, message: 'Invalid request', error: error };
+    }
+  }
+
+  plugin.controllers.auth.adminResetToken = async (ctx) => {
+    try {
+      const { id } = await checkStrapiToken(ctx);
+
+      //update strapi user
+      await strapi.entityService.update('plugin::users-permissions.user', id,
+        {
+          data: {
+            resetPasswordToken: null,
+            resetPasswordTokenExpires: null,
+          }
+        },
+      );
+  
+      ctx.status = 200;
+      ctx.body = { status: true, message: 'Token reset', error: "" };
     } catch (error) {
       console.log(error);
       ctx.status = 400;

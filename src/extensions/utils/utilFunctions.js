@@ -4,11 +4,15 @@ const checkStrapiToken = async (ctx) => {
 }
 
 const checkTokenIsExpired = (exp) => {
-    if (exp !== null && exp < Date.now() / 1000) {
-        return { status: false, message: 'Token expired', error: "" };
+    if (!exp) {
+        return { status: true, message: 'Token is invalid', error: "" };
     }
 
-    return { status: true, message: 'Token is valid', error: "" };
+    if (exp < Date.now() / 1000) {
+        return { status: true, message: 'Token expired', error: "" };
+    }
+
+    return { status: false, message: 'Token is valid', error: "" };
 }
 
 const generateConfirmationToken = () => {
